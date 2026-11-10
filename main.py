@@ -2,7 +2,7 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 import requests
-from requests.exceptions import HTTPError
+from random import randint
 from slack_bolt import App
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 
@@ -60,6 +60,62 @@ def player_info(ack, respond, command):
         }
     ]
     respond(blocks=blocks)
+
+@app.command("/chess-title")
+def chess_titles(ack, respond, command):
+    ack()
+
+    title = str(command["text"]).upper()
+    try:
+        chess_titles_response = requests.get(f"https://api.chess.com/pub/titled/{title}", headers=headers)
+        chess_titles_response.raise_for_status()
+    except Exception as e:
+        print(f"titles, probably a 404 error: {e}")
+        respond("sorry, i think you entered a wrong title.. pls use only this 'GM, WGM, IM, WIM, FM, WFM, NM, WNM, CM, WCM' thxx :cat-heart:")
+        return
+
+    chess_titles_json = chess_titles_response.json()
+
+    ten_players_title = []
+
+    for a in range(10):
+        random_player_number = randint(0, len(chess_titles_json["players"]))
+        ten_players_title.append(chess_titles_json["players"][random_player_number])
+
+    blocks = [
+        {
+            "type": "header",
+            "text": {
+                "type": "plain_text",
+                "text": f"RANDOM 10 PLAYERS FROM '{title}' TITLE :chess-brilliant:",
+                "emoji": True
+            }
+        },
+        {
+            "type": "divider"
+        },
+        {
+            "type": "section",
+            "fields": [
+                {
+                    "type": "mrkdwn",
+                    "text": f" \n".join(ten_players_title)
+                }
+            ]
+        }
+    ]
+    respond(blocks=blocks)
+
+@app.command("/chess-random-puzzle")
+def random_puzzle(ack, command, respond):
+    ack()
+
+    try:
+        random_puzzle_response = requests.get("https://api.chess.com/pub/puzzle/random", headers=headers)
+        random_puzzle_response.raise_for_status()
+    except Exception as e:
+        print(f"puzzle error: {e}")
+        respond("sorry, there was an error, pls try again in a few seconds!!")
 
 @app.event("app_mention")
 def app_mention(say, body):
