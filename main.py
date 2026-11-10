@@ -117,6 +117,37 @@ def random_puzzle(ack, command, respond):
         print(f"puzzle error: {e}")
         respond("sorry, there was an error, pls try again in a few seconds!!")
 
+    random_puzzle_json = random_puzzle_response.json()
+
+    blocks = [
+        {
+            "type": "header",
+            "text": {
+                "type": "plain_text",
+                "text": f"Random Puzzle: {random_puzzle_json["title"]}",
+                "emoji": True
+            }
+        },
+        {
+            "type": "image",
+            "image_url": random_puzzle_json["image"],
+            "alt_text": "random puzzle image from chess.com"
+        },
+        {
+            "type": "divider"
+        },
+        {
+            "type": "section",
+            "fields": [
+                {
+                    "type": "mrkdwn",
+                    "text": f"Name: {random_puzzle_json["title"]}\nURL: {random_puzzle_json["url"]}"
+                }
+            ]
+        }
+    ]
+    respond(blocks=blocks)
+
 @app.event("app_mention")
 def app_mention(say, body):
     say("Haii :hii: do you need smth? (i have slash commands that you can use!!)")
