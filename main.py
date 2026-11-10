@@ -18,16 +18,20 @@ def player_info(ack, respond, command):
     try:
         chess_api_response = requests.get(f"https://api.chess.com/pub/player/{username}", headers=headers)
         chess_api_response.raise_for_status()
-    except HTTPError as e:
-        if e.response.status_code == 404:
-            print(f"user cant found.. {e}")
-            respond("Sorry, but i cant find this chess player, maybe the username is wrong? :hs:")
-        else:
-            print(f"error: {e}")
-            respond("Sorry but there's an error, please retry in a few seconds")
-            return
+    except Exception as e:
+        respond("Sorry, but i cant find this chess player, maybe the username is wrong? :hs:")
+        return
 
     chess_user_data = chess_api_response.json()
+
+    try:
+        country_api_response = requests.get(chess_user_data["country"], headers=headers)
+        country_api_response.raise_for_status()
+    except Exception as e:
+        print(f"country error : {e}")
+        respond("Sorry but there's an error when finding the user's country, pls try again in a few seconds :pls:")
+    
+    country_api_json = country_api_response.json()
     blocks = [
         {
             "type": "header",
@@ -50,7 +54,7 @@ def player_info(ack, respond, command):
             "fields": [
                 {
                     "type": "mrkdwn",
-                    "text": "test"
+                    "text": f"*Country:* {country_api_json["name"]}\n*User link:* <{chess_user_data["url"]}|{username}>\n*Username:* {chess_user_data["username"]}\n*Streamer:* {chess_user_data["is_streamer"]}\n*League:* {chess_user_data["league"]}\n*Followers:* {chess_user_data["followers"]}\n*User ID:* {chess_user_data["player_id"]}\n*Status:* {chess_user_data["status"]}"
                 }
             ]
         }
@@ -61,7 +65,7 @@ def player_info(ack, respond, command):
 def app_mention(say, body):
     say("Haii :hii: do you need smth? (i have slash commands that you can use!!)")
 
-if __name__ == "__main__":
-    print("Your app is starting...")
-    handler = SocketModeHandler(app, os.getenv("APP_TOKEN"))
-    handler.start()
+
+print("Your app is starting...")
+handler = SocketModeHandler(app, os.getenv("APP_TOKEN"))
+handler.start()
