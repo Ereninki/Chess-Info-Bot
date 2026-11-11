@@ -20,21 +20,24 @@ This slack bot has 3 slash commands, **/chess-player < chess.com username >**, *
 The **/chess-player < chess.com username >** command gives you information about a chess.com player with the username you typed
 
 **example:** /chess-player MagnusCarlsen
-![image](https://cdn.hackclub.com/01a1cc59-99ab-793d-836d-ba500f30c0ab/image%20(2).png)
+
+![image](<https://cdn.hackclub.com/01a1cc59-99ab-793d-836d-ba500f30c0ab/image%20(2).png>)
 
 ---
 
 The **/chess-title** command shows you 10 random player from the chess title you selected (btw the chess titles are GM, WGM, IM, WIM, FM, WFM, NM, WNM, CM, WCM if you didnt know..)
 
 **example**: /chess-title GM
-![image](https://cdn.hackclub.com/01a1cc61-0fbe-7293-883f-bd47653b0cb3/image%20(3).png)
+
+![image](<https://cdn.hackclub.com/01a1cc61-0fbe-7293-883f-bd47653b0cb3/image%20(3).png>)
 
 ---
 
 The **/chess-random-puzzle** command is just giving you information about a random puzzle in chess.com
 
 **example:** /chess-random-puzzle
-![image](https://cdn.hackclub.com/01a1ccb2-8227-7017-9c4d-5bb7eb6d7f48/image%20(4).png)
+
+![image](<https://cdn.hackclub.com/01a1ccb2-8227-7017-9c4d-5bb7eb6d7f48/image%20(4).png>)
 
 ---
 
